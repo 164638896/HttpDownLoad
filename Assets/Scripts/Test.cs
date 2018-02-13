@@ -19,13 +19,14 @@ public class Test : MonoBehaviour {
 	}
 
 	HttpDownLoad http;
-	string url = @"http://192.168.203.79/Unity5.6.4.rar";
+	string testURL = @"http://127.0.0.1/Unity5.6.4.rar";
 	string savePath;
 	
-	void Start () {
+	void Start ()
+    {
 		savePath = Application.streamingAssetsPath;
 		http = new HttpDownLoad();
-		http.DownLoad(url, savePath, LoadLevel);
+		http.DownLoad(testURL, savePath, LoadLevel);
 	}
 
 	void OnDisable()
@@ -46,8 +47,8 @@ public class Test : MonoBehaviour {
 		if(isDone)
 		{
 			isDone = false;
-			string url = @"file://" + Application.streamingAssetsPath + "/test";
-			StartCoroutine(LoadScene(url));
+
+            StartCoroutine(LoadScene(@"file://" + Application.streamingAssetsPath + "/" + testURL.Substring(testURL.LastIndexOf('/') + 1)));
 		}
 	}
 
