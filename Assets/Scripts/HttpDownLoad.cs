@@ -88,17 +88,23 @@ public class HttpDownLoad
                     fs.Dispose();
 
                     //如果下载完毕，执行回调
-                    if (progress == 1)
+                    if (progress >= 1)
                     {
                         isDone = true;
                         if (callBack != null) callBack();
+
+                        if(progress > 1)
+                        {
+                            UnityEngine.Debug.Log("下载错误:" + progress * 100 + "%");
+                        }
                     }
 
                     UnityEngine.Debug.Log("下载进度为:" + progress * 100 + "%");
                 }
                 catch(WebException ex)
                 {
-                    UnityEngine.Debug.Log("time out");
+                    UnityEngine.Debug.Log("WebException Error code: " + ex.Status);
+
                     //if (callBack != null) callBack();
                 }
             }
@@ -133,7 +139,7 @@ public class HttpDownLoad
         }
         catch (WebException ex)
         {
-            UnityEngine.Debug.Log("time out");
+            UnityEngine.Debug.Log("WebException Error code: " + ex.Status);
         }
 
         return 0;
