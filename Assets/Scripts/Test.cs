@@ -19,7 +19,7 @@ public class Test : MonoBehaviour {
 	}
 
 	HttpDownLoad http;
-	string testURL = @"http://127.0.0.1/Unity5.6.4.rar";
+	string testURL = @"http://127.0.0.1/SharpZipLib_0860_Bin.zip";
 	string savePath;
 	
 	void Start ()
@@ -27,7 +27,7 @@ public class Test : MonoBehaviour {
 		savePath = Application.streamingAssetsPath;
 		http = new HttpDownLoad();
 		http.DownLoad(testURL, savePath, LoadLevel);
-	}
+    }
 
 	void OnDisable()
 	{
@@ -46,8 +46,9 @@ public class Test : MonoBehaviour {
 		text.text = "资源加载中" + (slider.value * 100).ToString("0.00") + "%"; 
 		if(isDone)
 		{
-			isDone = false;
-
+            UnityEngine.Debug.Log("加载完成");
+            isDone = false;
+            HttpDownLoad.UnZipFile(savePath + "/SharpZipLib_0860_Bin.zip", savePath);
             StartCoroutine(LoadScene(@"file://" + Application.streamingAssetsPath + "/" + testURL.Substring(testURL.LastIndexOf('/') + 1)));
 		}
 	}

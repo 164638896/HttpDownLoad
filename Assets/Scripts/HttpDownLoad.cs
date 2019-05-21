@@ -1,9 +1,8 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Threading;
+﻿using System.Threading;
 using System.IO;
 using System.Net;
 using System;
+using ICSharpCode.SharpZipLib.Zip;
 
 public class HttpDownLoad
 {
@@ -28,10 +27,10 @@ public class HttpDownLoad
             {
                 Directory.CreateDirectory(savePath);
             }
-        
+
             //获取下载文件的总长度
             long totalLength = GetLength(url);
-            if(totalLength > 0)
+            if (totalLength > 0)
             {
                 try
                 {
@@ -93,7 +92,7 @@ public class HttpDownLoad
                         isDone = true;
                         if (callBack != null) callBack();
 
-                        if(progress > 1)
+                        if (progress > 1)
                         {
                             UnityEngine.Debug.Log("下载错误:" + progress * 100 + "%");
                         }
@@ -101,7 +100,7 @@ public class HttpDownLoad
 
                     UnityEngine.Debug.Log("下载进度为:" + progress * 100 + "%");
                 }
-                catch(WebException ex)
+                catch (WebException ex)
                 {
                     UnityEngine.Debug.Log("WebException Error code: " + ex.Status);
 
@@ -148,5 +147,73 @@ public class HttpDownLoad
     public void Close()
     {
         isStop = true;
+    }
+
+    public static void UnZipFile(string zipfile, string outPath)
+    {
+        // Perform simple parameter checking.
+        //if (file.Length < 1)
+        //{
+        //    Console.WriteLine("Usage UnzipFile NameOfFile");
+        //    return;
+        //}
+
+        if (!File.Exists(zipfile))
+        {
+            Console.WriteLine("Cannot find file '{0}'", zipfile);
+            return;
+        }
+
+        try
+        {
+
+            using (ZipInputStream s = new ZipInputStream(File.OpenRead(zipfile)))
+            {
+
+                ZipEntry theEntry;
+                while ((theEntry = s.GetNextEntry()) != null)
+                {
+
+                    Console.WriteLine(theEntry.Name);
+
+                    string directoryName = Path.GetDirectoryName(theEntry.Name);
+                    string fileName = Path.GetFileName(theEntry.Name);
+
+                    // create directory
+                    if (directoryName.Length > 0)
+                    {
+                        Directory.CreateDirectory(outPath + "/" + directoryName);
+                    }
+
+                    if (fileName != String.Empty)
+                    {
+                        using (FileStream streamWriter = File.Create(outPath + "/" + theEntry.Name))
+                        {
+
+                            int size = 2048;
+                            byte[] data = new byte[2048];
+                            while (true)
+                            {
+                                size = s.Read(data, 0, data.Length);
+                                if (size > 0)
+                                {
+                                    streamWriter.Write(data, 0, size);
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+        catch (System.Exception ex)
+        {
+            UnityEngine.Debug.LogError("解压失敗--" + ex.Message);
+        }
+        
     }
 }

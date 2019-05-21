@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2017
+# Visual Studio 15
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpDownLoad", "HttpDownLoad.csproj", "{3947981A-90FA-3A00-9578-A6779B32BEC8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpDownLoad.Editor", "HttpDownLoad.Editor.csproj", "{B702F165-052B-642A-10D1-88D95D1EE1AC}"
